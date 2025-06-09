@@ -25,9 +25,14 @@
             <div class="guest-input">
                 <label for="guestCount">Number of Guests:</label>
                 <input type="number" id="guestCount" value="80" min="30" max="200">
-                <button onclick="updateCalculations()" style="padding: 12px 25px; background: linear-gradient(45deg, #93c5fd, #60a5fa); color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold;">Update Costs</button>
+                <button id="updateButton" onclick="updateCalculations()" class="update-button">
+                    <span id="buttonText">Update Costs</span>
+                </button>
             </div>
         </div>
+
+        <!-- Toast Container -->
+        <div class="toast-container" id="toastContainer"></div>
 
         <div class="tabs">
             <button class="tab active" onclick="showTab('lunch')">🍛 Lunch Catering</button>
@@ -175,6 +180,59 @@
 
         let currentGuestCount = 80;
         let lunchChart, teabreakChart;
+        let toastCounter = 0;
+
+        // Toast notification functions
+        function showToast(type, title, message, duration = 4000) {
+            const toastContainer = document.getElementById('toastContainer');
+            const toastId = `toast-${++toastCounter}`;
+            
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            toast.id = toastId;
+            
+            const iconMap = {
+                success: '✅',
+                error: '❌',
+                warning: '⚠️',
+                info: 'ℹ️'
+            };
+            
+            toast.innerHTML = `
+                <button class="toast-close" onclick="closeToast('${toastId}')">&times;</button>
+                <div class="toast-header">
+                    <span class="toast-icon">${iconMap[type] || iconMap.info}</span>
+                    ${title}
+                </div>
+                <div class="toast-message">${message}</div>
+            `;
+            
+            toastContainer.appendChild(toast);
+            
+            // Trigger animation
+            setTimeout(() => {
+                toast.classList.add('show');
+            }, 100);
+            
+            // Auto remove toast
+            setTimeout(() => {
+                closeToast(toastId);
+            }, duration);
+            
+            return toastId;
+        }
+        
+        function closeToast(toastId) {
+            const toast = document.getElementById(toastId);
+            if (toast) {
+                toast.classList.remove('show');
+                setTimeout(() => {
+                    if (toast.parentNode) {
+                        toast.parentNode.removeChild(toast);
+                    }
+                }, 300);
+            }
+        }
 
         function showTab(tabName) {
             // Hide all content
@@ -282,14 +340,48 @@
             });
         }
 
-        function updateCalculations() {
-            currentGuestCount = parseInt(document.getElementById('guestCount').value) || 80;
-            renderCaterers(lunchCaterers, 'lunchCaterers');
-            renderCaterers(teabreakCaterers, 'teabreakCaterers');
-            updateRecommendations();
-            if (lunchChart && teabreakChart) {
-                updateCharts();
+        function updateCalculations(showToastNotification = true) {
+            const button = document.getElementById('updateButton');
+            const buttonText = document.getElementById('buttonText');
+            
+            // Only show loading state if this is a user-triggered update
+            if (showToastNotification) {
+                button.classList.add('loading');
+                button.disabled = true;
+                buttonText.textContent = 'Updating...';
             }
+            
+            // Simulate processing time for better UX (only for user-triggered updates)
+            const delay = showToastNotification ? 800 : 0;
+            
+            setTimeout(() => {
+                currentGuestCount = parseInt(document.getElementById('guestCount').value) || 80;
+                renderCaterers(lunchCaterers, 'lunchCaterers');
+                renderCaterers(teabreakCaterers, 'teabreakCaterers');
+                updateRecommendations();
+                if (lunchChart && teabreakChart) {
+                    updateCharts();
+                }
+                
+                // Only show success state and toast for user-triggered updates
+                if (showToastNotification) {
+                    // Remove loading state and add success state
+                    button.classList.remove('loading');
+                    button.classList.add('success');
+                    button.disabled = false;
+                    buttonText.textContent = 'Updated!';
+                    
+                    // Show success toast
+                    showToast('success', 'Costs Updated Successfully!', `All calculations have been updated for ${currentGuestCount} guests.`);
+                    
+                    // Reset button after success animation
+                    setTimeout(() => {
+                        button.classList.remove('success');
+                        buttonText.textContent = 'Update Costs';
+                    }, 2000);
+                }
+                
+            }, delay);
         }
 
         function updateCharts() {
@@ -460,7 +552,12 @@
 
         // Initialize dashboard
         document.addEventListener('DOMContentLoaded', function() {
-            updateCalculations();
+            updateCalculations(false); // Don't show toast on initial load
+            
+            // Show welcome toast after initial load
+            setTimeout(() => {
+                showToast('info', 'Dashboard Ready!', 'All catering options have been loaded and calculated for 80 guests.', 3000);
+            }, 500);
         });
     </script>
 </body>
