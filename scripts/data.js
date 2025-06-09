@@ -34,7 +34,7 @@ const lunchCaterers = [
             "Beverage (choose 1)": "Refreshing Tropical Punch Juice, Lemongrass Pandan Drink, Wintermelon Tea, Iced Lemon Tea"   
         },
         features: ["Disposable Cutlery Included", "MOHT Registered"],
-        note: "Wide variety of authentic Asian dishes with chef recommendations"
+        note: "Consider Lemongrass Pandan Drink for beverage."
     },
     {
         name: "Liang Food Caterer Standard Buffet A",
