@@ -11,25 +11,30 @@ const lunchCaterers = [
             "Fish (choose 1)": "Sweet & Sour Fish, Dried Chili Fish, Breaded Fish Fillet w Mayo, Spring Onion Fish",
             "Chicken (choose 1)": "Lemon Chicken, Honey Chicken, Sweet & Sour Chicken, Black Pepper Chicken",
             "Finger Food (choose 1)": "Spring Roll, Fish Ball, Breaded Scallop, Samosa",
-            "Dessert (choose 1)": "Ice Jelly w Cocktail, Chin Chow w Logan, Almond Jelly w Logan"
+            "Dessert (choose 1)": "Ice Jelly w Cocktail, Chin Chow w Logan, Almond Jelly w Logan",
+            "Drinks (choose 1)": "Fruit Punch, Orange, Blackcurrant"
         },
-        features: ["Disposable Cutlery Included", "Multiple Main Course Options", "Comprehensive Menu"],
-        note: "May exceed budget with delivery costs"
+        features: ["Disposable Cutlery Included"],
+        note: "Only sweet drinks available. May have to procure coffee/tea separately."
     },
     {
-        name: "Elsie's Kitchen - Nostalgic Taste",
-        pricePerPerson: 16.67,
-        deliveryCharge: 98.10,
-        minPax: 50,
+        name: "Stamford Catering (8+1 Courses)",
+        pricePerPerson: 19.62,
+        deliveryCharge: 0.00,
+        minPax: 30,
         highlights: {
-            "Rice & Noodles (choose 1)": "Nasi Goreng Kampung, Thai Pineapple Fried Rice, Mamak-Indonesian Mie Goreng",
-            "Meat (choose 1)": "Sticky Lemon Chicken, Kunyit-Ginger Fried Chicken, Golden Cereal Fish",
-            "Vegetables (choose 1)": "Nonya Chap Chye, Chop Suey Mixed Vegetables, Xiao Bai Chye with Mushrooms",
-            "Finger Food (choose 1)": "Thai Fish Cake, Potato Samosa, Honey Shrimp Wanton, Seafood Money Bag",
-            "Desserts (choose 1)": "Pulut Hitam Tart, Tau Suan with You Tiao, Pandan Buttercream Choux"
+            "Mains (choose 1)": "Signature Wok-Fried Egg Rice with Silver Fish, Yang Chow Fried Rice, Nasi Goreng, Signature Mee Goreng, Hong Kong Fried Egg Noodles, Vegetarian Fried Bee Hoon",
+            "Chicken (choose 1)": "Signature Curry Chicken with Potatoes, Ayam Masak Merah, Prawn Paste Mid Wing, Roasted Chicken Chop with BBQ Sauce, Baked Teriyaki Chicken Chop with Pickles, Thai Crispy Chicken Chop with Plum Sauce",
+            "Ocean Catch (choose 1)": "Fish Fillet with Assam Paste, Sweet and Sour Fish Fillet, Salted Egg Fish Fillet, Gong Bao Fish Fillet, Steamed Fish Otah",
+            "Beancurd / Egg (choose 1)": "Crab Stick Gui Hua Egg, Foo Yong Chicken Sausage Egg, Sze Chuan Mapo Tofu, Braised Egg Beancurd and Vegetables in Silky Egg Gravy",
+            "Vegetables (choose 1)": "Signature Curry Vegetables, Nonya Chap Chye, Chinese Cabbage Luo Han Zhai, Stir Fry Cauliflower and Broccoli",
+            "Dim Sum (choose 1)": "Steamed Cabbage Roll with Shrimp, Vegetables Spring Roll with Sweet Sauce, Golden Chicken Ngoh Hiang Roll, Steamed Mini Chicken & Shrimp Siew Mai with Sweet Sauce",
+            "Finger Food (choose 1)": "Seafood Crouton w Tartar Dip, Cabbage Spring Roll with Sweet Sauce, Seafood Pocket with Dip, Golden Sotong Ball, Sambal Fish Ball, Fried Samosa",
+            "Dessert (choose 1)": "Chilled Almond Beancurd with Longan, Chilled Cheng Tng with Snow Fungus and Longan, Chilled Honeydew Sago, Agar Agar with Fruit Cocktail",
+            "Beverage (choose 1)": "Refreshing Tropical Punch Juice, Lemongrass Pandan Drink, Wintermelon Tea, Iced Lemon Tea"   
         },
-        features: ["Disposable Cutlery Included", "Local Nostalgic Flavors", "Authentic Asian Cuisine"],
-        note: "Best value for traditional flavors"
+        features: ["Disposable Cutlery Included", "MOHT Registered"],
+        note: "Wide variety of authentic Asian dishes with chef recommendations"
     },
     {
         name: "Liang Food Caterer Standard Buffet A",
@@ -42,43 +47,51 @@ const lunchCaterers = [
             "Main 3 (choose 1)": "Stir Fry Mixed Vegetables, Lontong Vegetables, Vegetarian Mixed Vegetables",
             "Main 4 (choose 1)": "Crabbites Egg Fried Rice, Biryani Rice, Fried Bee Hoon, Laksa Linguine",
             "Sides/Snacks (choose 1)": "Prawn Wanton, Breaded Scallop, Ngoh Hiang, Thai Fishcake",
-            "Desserts (choose 1)": "Chendol Gula Melaka, Mixed Fruit Platter, Chocolate Eclair"
+            "Desserts (choose 1)": "Chendol Gula Melaka, Mixed Fruit Platter, Chocolate Eclair",
+            "Drinks (choose 1)": "Tropical Fruit Punch, Iced Lemon Tea, Yuzu, Peach Muscato"
         },
-        features: ["Disposable Cutlery Included", "Free Delivery >$1000", "Vegetarian Options", "Diverse Menu"],
-        note: "Most flexible option with lowest minimum"
+        features: ["Disposable Cutlery Included", "Free Delivery >$1000"],
+        note: "May consider Yuzu for the drink option or procure coffee/tea separately."
     }
 ];
 
 const teabreakCaterers = [
     {
-        name: "Neo Garden High Tea B",
+        name: "Neo Garden High Tea Package B",
         pricePerPerson: 8.39,
         deliveryCharge: 98.10,
         minPax: 80,
         highlights: {
-            "Salads (choose 1)": "Potato Salad, Garden Salad, Caesar Salad, Tropical Fruits Salad",
-            "Sandwiches (choose 1)": "Egg Mayo, Tuna Mayo, Cheddar Cheese, Sardine, Veggie",
-            "Cakes/Pastry (choose 1)": "Mini Custard Puff, Swiss Roll, Butter Cake, Marble Cake",
-            "Deep Fried (choose 1)": "Fish Ball, Spring Roll, Breaded Scallop, Mini Curry Puff",
-            "Dim Sum/Kueh (choose 1)": "Steamed Yam Cake, Mini Soon Kueh, Mini Red Bean Pau"
+            "*Salads": "Potato Salad, Garden Salad, Caesar Salad, Tropical Fruits Salad",
+            "*Sandwiches": "Egg Mayo, Tuna Mayo, Cheddar Cheese, Sardine, Veggie",
+            "*Cakes/Pastry": "Mini Custard Puff, Swiss Roll, Butter Cake, Marble Cake",
+            "*Deep Fried": "Fish Ball, Spring Roll, Breaded Scallop, Mini Curry Puff, Crispy Golden Long Spring Roll, Sotong You Tiao, Curry Samosa, Sotong Ball",
+            "*Dim Sum/Kueh": "Steamed Yam Cake, Mini Soon Kueh, Mini Red Bean Pau, Mala Chicken Siew Mai (+$0.50), Steamed Chicken Siew Mai, Steamed Har Kau (+$0.50), Steamed Pumpkin Cake, Mini Rice Kueh, Steamed Mini Honey Chicken Pau, Assorted Nonya Kueh (+$0.50)",
+            "*Chicken": "Honey Drumlet, Hot & Spicy Drumlet, Crispy Mid-Wing, Chicken Nugget, Teriyaki Mid-Wing",
+            "*Dessert": "Ice Jelly w Cocktail, Almond Jelly w Longan, Chin Chow W Longan, Fresh Fruits Platter",
+            "Beverage (choose 1)": "Homemade Herbal Drink - Roselle Hawthorn (+$1.00), Homemade Herbal Drink - Ginseng Chrysanthemum (+$1.00), Homemade Herbal Drink - Loh Han Guo (+$1.00), Fruit Punch, Blackcurrant Drink, Coffee - Sugar & Creamer, Tea - Sugar & Creamer"
         },
-        features: ["Disposable Cutlery Included", "Variety of Sandwiches", "Fresh Fruit Platter"],
-        note: "Requires minimum 80 guests"
+        features: ["Disposable Cutlery Included"],
+        note: "Choose 5 options from any of the starred categories + 1 beverage. Maximum of 2 options from each starred category."
     },
     {
-        name: "Elsie's Kitchen Classic Tea Menu",
-        pricePerPerson: 8.75,
-        deliveryCharge: 98.10,
-        minPax: 80,
+        name: "Stamford Catering Classic High Tea D",
+        pricePerPerson: 9.81,
+        deliveryCharge: 0.00,
+        minPax: 50,
         highlights: {
-            "Noodles (choose 1)": "Seafood White Bee Hoon, Nonya Fried Mee Siam, Mamak-Indonesian Mie Goreng, Vegetarian Black Bee Hoon",
-            "Finger Food (select 6)": "Ebi Fry, Breaded Salad Roll, Thai Fish Cake, Potato Samosa, Rocky Shrimp Ball, Sambal Fishball, Sardine Puff, Seafood Gyoza, Seafood Money Bag",
-            "Dim Sum (choose 1)": "Steamed Red Bean Bun, Crystal Dumpling, Chicken Siew Mai",
-            "Desserts (choose 1)": "Almond Logan, Bubur Hitam, Cheng Teng, Tropical Fresh Fruit",
-            "Cakes (choose 1)": "Pandan Cake, Gula Melaka Butter Cake, Ondeh Cake"
+            "*Salad": "Mixed Garden Salad with Thousand Island Dressing, Japanese Potato Salad, International Fruit Salad, Thai Mango Salad",
+            "*Sandwich": "Egg Mayonnaise Sandwich, Chicken Ham Finger Sandwich, Crab Stick Mayo Sandwich, Vegetables Finger Sandwich, Sardine Finger Sandwich, Tuna Mousse Finger Sandwich",
+            "*Pastry": "Mini Assorted Swiss Roll, Mini Chocolate Brownies, Traditional Mini English Carrot Cakes, Mini Marble Cake Slice, Mini Chocolate Sliced Cake, Baked Mini Chicken Pie",
+            "*Deep Fried": "Breaded Butterfly Shrimp w Thai Dipping Sauce, Golden Fish Goujons with Tartar Sauce, Golden Fish Ball, Sotong Ball, Golden Prawn Ball w Tartar Dip, Curry Samosa, Vegetable Gyoza with Vinegar Dip, Potato Curry Puff, Spring Roll with Sweet Sauce, Golden Seafood Pocket",
+            "*Dim Sum": "Cabbage Roll w Shrimp, Chicken Ngoh Hiang Roll, Steamed Chee Cheong Fan, Mini Carrot Cake with Sweet Sauce, Steamed Mini Yam Cake w Sweet Sauce, Steamed Mini Chicken & Shrimp Siew Mai w Sweet Sauce, Steamed Mini Har Kao with Sweet Sauce, Steam Mini Lotus Pau, Steamed Mini Vegetable Pau, Steamed Red Bean Mini Pau, Steamed Fish Otah",
+            "*Chicken Delights": "Spicy Nuggets, Buffalo Drumlets, Chicken Cocktail Sausage, Chicken Nuggets with Tartar Dip, BBQ Mini Drumlet, Teriyaki Mini Drumlet, Golden Mid Wing, Honey Glazed Mid Wing",
+            "*Mains": "Pan-Fried Carrot Cake with Egg, Yong Chow Fried Rice, Mee Goreng, Singapore Style Fried Bee Hoon, Vegetarian Fried Bee Hoon, Mee Siam Goreng, Roti Prata w Curry Gravy",
+            "*Desserts": "Cold Honeydew Sago (Seasonal and subject to substitution), Grass Jelly with Longan, Agar Agar with Fruit Cocktails, Chilled Almond Beancurd with Longans, Hot Tau Suan, Hot Bubur Pulut Hitam",
+            "Beverage (choose 1)": "Refreshing Tropical Punch Juice, Wintermelon Tea, Iced Lemon Tea, Grapefruit Pomelo, Hot Coffee with Sugar and Creamer, Hot Tea with Sugar and Creamer"
         },
-        features: ["Disposable Cutlery Included", "Local Specialty Items", "Hot & Cold Beverages"],
-        note: "Premium pricing with extensive options"
+        features: ["Disposable Cutlery Included", "MOHT Registered"],
+        note: "Choose 6 options from any of the starred categories + 1 beverage"
     },
     {
         name: "Liang Food Caterer Tea Reception B",
@@ -86,13 +99,13 @@ const teabreakCaterers = [
         deliveryCharge: 58.00,
         minPax: 60,
         highlights: {
-            "Dim Sum (choose 1)": "Chicken Siew Mai, Mini Har Kao, Salted Egg Custard Pau",
-            "Snacks (choose 1)": "Sotong Ball, Fish Ball, Spring Roll, Thai Fishcake",
-            "Sandwiches (choose variety)": "Egg Mayonnaise, Tuna Mayonnaise, Butter & Kaya",
-            "Pastries (choose 1)": "Chocolate Éclair, Cream Puffs, Swiss Roll",
-            "Fruits (choose 1)": "Watermelon, Honeydew"
+            "Dim Sum (choose 1)": "Chicken Siew Mai, Mini Har Kao, Cabbage Roll, Salted Egg Custard Pau, Chicken Char Siew Pau, Liang Yong Pau",
+            "Snacks (choose 1)": "Sotongball, Fishball, Prawn Wanton, Springroll, Samosa (Potato), Curry Puff (Potato), Thai Fishcake, Chicken Nugget, Plant Based Calamari (VEG), Plant Based Fishless Finger (VEG)",
+            "Sandwiches (choose 1)": "Egg Mayonnaise, Tuna Mayonnaise, Butter & Kaya, Chicken Ham & Cheese, Vegetarian Sandwich (With Cucumber, Salad & Tomatoes ONLY)",
+            "Pastries or Fruits (choose 1)": "Chocolate Éclair, Cream Puffs, Swiss Roll, Watermelon, Honeydew",
+            "Beverage (choose 1)": "Coffee, Tea, Hot Milo, Iced Lemon Tea"
         },
-        features: ["Disposable Cutlery Included", "Fresh Fruits Choose 1", "Plant-based Options"],
-        note: "Simple but comprehensive tea reception (*Free delivery if food >$1000 before GST)"
+        features: ["Disposable Cutlery Included"],
+        note: "Free delivery if food >$1000 before GST"
     }
 ];
