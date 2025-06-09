@@ -5,343 +5,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CHoF Workshop Dashboard</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+    <link rel="stylesheet" href="styles/main.css">
 
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
-            min-height: 100vh;
-            color: #333;
-        }
-
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-
-        .header {
-            text-align: center;
-            margin-bottom: 30px;
-            background: rgba(255, 255, 255, 0.95);
-            padding: 30px;
-            border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-        }
-
-        .header h1 {
-            font-size: 2.5em;
-            color: #1e3a8a;
-            margin-bottom: 10px;
-            font-weight: 700;
-            text-shadow: 0 2px 4px rgba(30, 58, 138, 0.2);
-        }
-
-        .event-info {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
-            margin-top: 20px;
-        }
-
-        .info-card {
-            background: rgba(255, 255, 255, 0.8);
-            padding: 15px;
-            border-radius: 10px;
-            text-align: center;
-            border-left: 4px solid #93c5fd;
-        }
-
-        .guest-calculator {
-            background: rgba(255, 255, 255, 0.95);
-            padding: 25px;
-            border-radius: 15px;
-            margin-bottom: 30px;
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
-        }
-
-        .guest-input {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            flex-wrap: wrap;
-        }
-
-        .guest-input label {
-            font-weight: bold;
-            color: #4a5568;
-        }
-
-        .guest-input input {
-            padding: 12px;
-            border: 2px solid #e2e8f0;
-            border-radius: 8px;
-            font-size: 16px;
-            width: 120px;
-            transition: all 0.3s ease;
-        }
-
-        .guest-input input:focus {
-            outline: none;
-            border-color: #93c5fd;
-            box-shadow: 0 0 10px rgba(147, 197, 253, 0.4);
-        }
-
-        .tabs {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 20px;
-            background: rgba(255, 255, 255, 0.9);
-            padding: 10px;
-            border-radius: 15px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-        }
-
-        .tab {
-            padding: 15px 25px;
-            background: transparent;
-            border: none;
-            border-radius: 10px;
-            cursor: pointer;
-            font-weight: bold;
-            transition: all 0.3s ease;
-            flex: 1;
-        }
-
-        .tab.active {
-            background: linear-gradient(45deg, #93c5fd, #60a5fa);
-            color: white;
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(147, 197, 253, 0.4);
-        }
-
-        .tab:hover:not(.active) {
-            background: rgba(147, 197, 253, 0.2);
-        }
-
-        .content {
-            background: rgba(255, 255, 255, 0.95);
-            padding: 30px;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-            margin-bottom: 20px;
-        }
-
-        .caterer-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-            gap: 25px;
-            margin-bottom: 30px;
-        }
-
-        .caterer-card {
-            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
-            border-radius: 15px;
-            padding: 25px;
-            border: 2px solid transparent;
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .caterer-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 4px;
-            background: linear-gradient(45deg, #93c5fd, #60a5fa);
-        }
-
-        .caterer-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
-            border-color: #93c5fd;
-        }
-
-        .caterer-name {
-            font-size: 1.4em;
-            font-weight: bold;
-            color: #2d3748;
-            margin-bottom: 15px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .price-badge {
-            background: linear-gradient(45deg, #48bb78, #38a169);
-            color: white;
-            padding: 8px 15px;
-            border-radius: 20px;
-            font-size: 1.1em;
-            font-weight: bold;
-            display: inline-block;
-            margin-bottom: 15px;
-        }
-
-        .total-cost {
-            background: linear-gradient(45deg, #ed8936, #dd6b20);
-            color: white;
-            padding: 10px 15px;
-            border-radius: 10px;
-            margin-top: 10px;
-            font-weight: bold;
-            text-align: center;
-        }
-
-        .menu-highlights {
-            margin-top: 15px;
-        }
-
-        .menu-category {
-            margin-bottom: 12px;
-        }
-
-        .menu-category strong {
-            color: #4a5568;
-            display: block;
-            margin-bottom: 5px;
-        }
-
-        .menu-items {
-            background: rgba(255, 255, 255, 0.7);
-            padding: 10px;
-            border-radius: 8px;
-            font-size: 0.9em;
-            line-height: 1.4;
-        }
-
-        .comparison-section {
-            margin-top: 30px;
-        }
-
-        .chart-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
-            gap: 30px;
-            margin-top: 20px;
-        }
-
-        .chart-card {
-            background: white;
-            padding: 25px;
-            border-radius: 15px;
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
-        }
-
-        .chart-title {
-            font-size: 1.3em;
-            font-weight: bold;
-            margin-bottom: 20px;
-            color: #4a5568;
-            text-align: center;
-        }
-
-        .recommendations {
-            background: linear-gradient(135deg, #e6fffa 0%, #b2f5ea 100%);
-            padding: 25px;
-            border-radius: 15px;
-            margin-top: 30px;
-            border-left: 5px solid #38b2ac;
-        }
-
-        .recommendations h3 {
-            color: #234e52;
-            margin-bottom: 15px;
-            font-size: 1.3em;
-        }
-
-        .recommendation-item {
-            background: rgba(255, 255, 255, 0.8);
-            padding: 15px;
-            border-radius: 10px;
-            margin-bottom: 10px;
-            border-left: 3px solid #38b2ac;
-        }
-
-        .hidden {
-            display: none;
-        }
-
-        .features-list {
-            list-style: none;
-            margin-top: 10px;
-        }
-
-        .features-list li {
-            padding: 5px 0;
-            position: relative;
-            padding-left: 20px;
-        }
-
-        .features-list li::before {
-            content: '✓';
-            position: absolute;
-            left: 0;
-            color: #48bb78;
-            font-weight: bold;
-        }
-
-        .warning {
-            background: #fed7d7;
-            color: #c53030;
-            padding: 10px;
-            border-radius: 8px;
-            margin-top: 10px;
-            border-left: 4px solid #e53e3e;
-        }
-
-        .budget-alert {
-            background: linear-gradient(135deg, #fef5e7 0%, #feebc8 100%);
-            border: 2px solid #f6ad55;
-            padding: 15px;
-            border-radius: 10px;
-            margin-top: 15px;
-        }
-
-        @media (max-width: 768px) {
-            .caterer-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .chart-container {
-                grid-template-columns: 1fr;
-            }
-            
-            .header h1 {
-                font-size: 2em;
-            }
-            
-            .guest-input {
-                flex-direction: column;
-                align-items: stretch;
-            }
-        }
-    </style>
+    <link rel="stylesheet" href="styles/main.css">
 </head>
 <body>
     <div class="container">
         <div class="header">
             <h1>CHoF Workshop Dashboard</h1>
             <div class="event-info">
-                <div class="info-card">
-                    <strong>Event Dates</strong>
-                    <div>1st July 2025 & 24th July 2025</div>
-                </div>
-                <div class="info-card">
-                    <strong>Event Type</strong>
-                    <div>CHoF Workshops</div>
-                </div>
-                <div class="info-card">
-                    <strong>Services</strong>
-                    <div>Lunch & Tea Break</div>
+                <div class="info-card" style="width: 100%; text-align: center; padding: 15px;">
+                    <div style="font-size: 1.1em; font-weight: bold; margin-bottom: 8px;">Event Dates</div>
+                    <div style="font-size: 1.1em;">1st July 2025 & 24th July 2025</div>
                 </div>
             </div>
         </div>
@@ -406,7 +81,8 @@
                     "Fish (choose 1)": "Sweet & Sour Fish, Dried Chili Fish, Breaded Fish Fillet w Mayo, Spring Onion Fish",
                     "Chicken (choose 1)": "Lemon Chicken, Honey Chicken, Sweet & Sour Chicken, Black Pepper Chicken",
                     "Finger Food (choose 1)": "Spring Roll, Fish Ball, Breaded Scallop, Samosa",
-                    "Dessert (choose 1)": "Ice Jelly w Cocktail, Chin Chow w Logan, Almond Jelly w Logan"
+                    "Dessert (choose 1)": "Ice Jelly w Cocktail, Chin Chow w Logan, Almond Jelly w Logan",
+                    "Drinks (choose 1)": "Fruit Punch, Orange, Blackcurrant"
                 },
                 features: ["Disposable Cutlery Included", "Multiple Main Course Options", "Comprehensive Menu"],
                 note: "May exceed budget with delivery costs"
@@ -421,7 +97,8 @@
                     "Meat (choose 1)": "Sticky Lemon Chicken, Kunyit-Ginger Fried Chicken, Golden Cereal Fish",
                     "Vegetables (choose 1)": "Nonya Chap Chye, Chop Suey Mixed Vegetables, Xiao Bai Chye with Mushrooms",
                     "Finger Food (choose 1)": "Thai Fish Cake, Potato Samosa, Honey Shrimp Wanton, Seafood Money Bag",
-                    "Desserts (choose 1)": "Pulut Hitam Tart, Tau Suan with You Tiao, Pandan Buttercream Choux"
+                    "Desserts (choose 1)": "Pulut Hitam Tart, Tau Suan with You Tiao, Pandan Buttercream Choux",
+                    "Drinks (choose 1)": "Fruit Punch, Barley Cordial"
                 },
                 features: ["Disposable Cutlery Included", "Local Nostalgic Flavors", "Authentic Asian Cuisine"],
                 note: "Best value for traditional flavors"
@@ -437,7 +114,8 @@
                     "Main 3 (choose 1)": "Stir Fry Mixed Vegetables, Lontong Vegetables, Vegetarian Mixed Vegetables",
                     "Main 4 (choose 1)": "Crabbites Egg Fried Rice, Biryani Rice, Fried Bee Hoon, Laksa Linguine",
                     "Sides/Snacks (choose 1)": "Prawn Wanton, Breaded Scallop, Ngoh Hiang, Thai Fishcake",
-                    "Desserts (choose 1)": "Chendol Gula Melaka, Mixed Fruit Platter, Chocolate Eclair"
+                    "Desserts (choose 1)": "Chendol Gula Melaka, Mixed Fruit Platter, Chocolate Eclair",
+                    "Drinks (choose 1)": "Tropical Fruit Punch, Iced Lemon Tea, Yuzu, Peach Muscat"
                 },
                 features: ["Disposable Cutlery Included", "Free Delivery >$1000", "Vegetarian Options", "Diverse Menu"],
                 note: "Most flexible option with lowest minimum"
@@ -455,7 +133,8 @@
                     "Sandwiches (choose 1)": "Egg Mayo, Tuna Mayo, Cheddar Cheese, Sardine, Veggie",
                     "Cakes/Pastry (choose 1)": "Mini Custard Puff, Swiss Roll, Butter Cake, Marble Cake",
                     "Deep Fried (choose 1)": "Fish Ball, Spring Roll, Breaded Scallop, Mini Curry Puff",
-                    "Dim Sum/Kueh (choose 1)": "Steamed Yam Cake, Mini Soon Kueh, Mini Red Bean Pau"
+                    "Dim Sum/Kueh (choose 1)": "Steamed Yam Cake, Mini Soon Kueh, Mini Red Bean Pau",
+                    "Drinks (choose 1)": "Fruit Punch, Blackcurrant, Coffee, Tea"
                 },
                 features: ["Disposable Cutlery Included", "Variety of Sandwiches", "Fresh Fruit Platter"],
                 note: "Requires minimum 80 guests"
@@ -470,7 +149,8 @@
                     "Finger Food (select 6)": "Ebi Fry, Breaded Salad Roll, Thai Fish Cake, Potato Samosa, Rocky Shrimp Ball, Sambal Fishball, Sardine Puff, Seafood Gyoza, Seafood Money Bag",
                     "Dim Sum (choose 1)": "Steamed Red Bean Bun, Crystal Dumpling, Chicken Siew Mai",
                     "Desserts (choose 1)": "Almond Logan, Bubur Hitam, Cheng Teng, Tropical Fresh Fruit",
-                    "Cakes (choose 1)": "Pandan Cake, Gula Melaka Butter Cake, Ondeh Cake"
+                    "Cakes (choose 1)": "Pandan Cake, Gula Melaka Butter Cake, Ondeh Cake",
+                    "Drinks (choose 1)": "Fruit Punch, Barley Cordial, Pink Guava, Nestle Lemonade, Iced Lemon Tea, Kopi C, Teh C, Coffee, Tea"
                 },
                 features: ["Disposable Cutlery Included", "Local Specialty Items", "Hot & Cold Beverages"],
                 note: "Premium pricing with extensive options"
@@ -485,7 +165,8 @@
                     "Snacks (choose 1)": "Sotong Ball, Fish Ball, Spring Roll, Thai Fishcake",
                     "Sandwiches (choose variety)": "Egg Mayonnaise, Tuna Mayonnaise, Butter & Kaya",
                     "Pastries (choose 1)": "Chocolate Éclair, Cream Puffs, Swiss Roll",
-                    "Fruits (choose 1)": "Watermelon, Honeydew"
+                    "Fruits (choose 1)": "Watermelon, Honeydew",
+                    "Drinks (choose 1)": "Coffee, Tea, Hot Milo, Iced Milo"
                 },
                 features: ["Disposable Cutlery Included", "Fresh Fruits Choose 1", "Plant-based Options"],
                 note: "Simple but comprehensive tea reception (*Free delivery if food >$1000 before GST)"
