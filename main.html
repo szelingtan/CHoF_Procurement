@@ -1,0 +1,785 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CHoF Workshops Catering Dashboard</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            color: #1e3a8a;
+            margin-bottom: 10px;
+            font-weight: 700;
+            text-shadow: 0 2px 4px rgba(30, 58, 138, 0.2);
+        }
+
+        .event-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .info-card {
+            background: rgba(255, 255, 255, 0.8);
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            border-left: 4px solid #93c5fd;
+        }
+
+        .guest-calculator {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        .guest-input {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .guest-input label {
+            font-weight: bold;
+            color: #4a5568;
+        }
+
+        .guest-input input {
+            padding: 12px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 16px;
+            width: 120px;
+            transition: all 0.3s ease;
+        }
+
+        .guest-input input:focus {
+            outline: none;
+            border-color: #93c5fd;
+            box-shadow: 0 0 10px rgba(147, 197, 253, 0.4);
+        }
+
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 10px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .tab {
+            padding: 15px 25px;
+            background: transparent;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            flex: 1;
+        }
+
+        .tab.active {
+            background: linear-gradient(45deg, #93c5fd, #60a5fa);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(147, 197, 253, 0.4);
+        }
+
+        .tab:hover:not(.active) {
+            background: rgba(147, 197, 253, 0.2);
+        }
+
+        .content {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+
+        .caterer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+
+        .caterer-card {
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            border-radius: 15px;
+            padding: 25px;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .caterer-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(45deg, #93c5fd, #60a5fa);
+        }
+
+        .caterer-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+            border-color: #93c5fd;
+        }
+
+        .caterer-name {
+            font-size: 1.4em;
+            font-weight: bold;
+            color: #2d3748;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .price-badge {
+            background: linear-gradient(45deg, #48bb78, #38a169);
+            color: white;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 1.1em;
+            font-weight: bold;
+            display: inline-block;
+            margin-bottom: 15px;
+        }
+
+        .total-cost {
+            background: linear-gradient(45deg, #ed8936, #dd6b20);
+            color: white;
+            padding: 10px 15px;
+            border-radius: 10px;
+            margin-top: 10px;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        .menu-highlights {
+            margin-top: 15px;
+        }
+
+        .menu-category {
+            margin-bottom: 12px;
+        }
+
+        .menu-category strong {
+            color: #4a5568;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .menu-items {
+            background: rgba(255, 255, 255, 0.7);
+            padding: 10px;
+            border-radius: 8px;
+            font-size: 0.9em;
+            line-height: 1.4;
+        }
+
+        .comparison-section {
+            margin-top: 30px;
+        }
+
+        .chart-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 30px;
+            margin-top: 20px;
+        }
+
+        .chart-card {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        .chart-title {
+            font-size: 1.3em;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: #4a5568;
+            text-align: center;
+        }
+
+        .recommendations {
+            background: linear-gradient(135deg, #e6fffa 0%, #b2f5ea 100%);
+            padding: 25px;
+            border-radius: 15px;
+            margin-top: 30px;
+            border-left: 5px solid #38b2ac;
+        }
+
+        .recommendations h3 {
+            color: #234e52;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+        }
+
+        .recommendation-item {
+            background: rgba(255, 255, 255, 0.8);
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            border-left: 3px solid #38b2ac;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .features-list {
+            list-style: none;
+            margin-top: 10px;
+        }
+
+        .features-list li {
+            padding: 5px 0;
+            position: relative;
+            padding-left: 20px;
+        }
+
+        .features-list li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: #48bb78;
+            font-weight: bold;
+        }
+
+        .warning {
+            background: #fed7d7;
+            color: #c53030;
+            padding: 10px;
+            border-radius: 8px;
+            margin-top: 10px;
+            border-left: 4px solid #e53e3e;
+        }
+
+        .budget-alert {
+            background: linear-gradient(135deg, #fef5e7 0%, #feebc8 100%);
+            border: 2px solid #f6ad55;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 15px;
+        }
+
+        @media (max-width: 768px) {
+            .caterer-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .chart-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .header h1 {
+                font-size: 2em;
+            }
+            
+            .guest-input {
+                flex-direction: column;
+                align-items: stretch;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>CHoF Workshop Dashboard</h1>
+            <div class="event-info">
+                <div class="info-card">
+                    <strong>Event Dates</strong>
+                    <div>1st July 2025 & 24th July 2025</div>
+                </div>
+                <div class="info-card">
+                    <strong>Event Type</strong>
+                    <div>CHoF Workshops</div>
+                </div>
+                <div class="info-card">
+                    <strong>Services</strong>
+                    <div>Lunch & Tea Break</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="guest-calculator">
+            <div class="guest-input">
+                <label for="guestCount">Number of Guests:</label>
+                <input type="number" id="guestCount" value="80" min="30" max="200">
+                <button onclick="updateCalculations()" style="padding: 12px 25px; background: linear-gradient(45deg, #93c5fd, #60a5fa); color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold;">Update Costs</button>
+            </div>
+        </div>
+
+        <div class="tabs">
+            <button class="tab active" onclick="showTab('lunch')">🍛 Lunch Catering</button>
+            <button class="tab" onclick="showTab('teabreak')">☕ Tea Break Catering</button>
+            <button class="tab" onclick="showTab('comparison')">📊 Cost Comparison</button>
+        </div>
+
+        <div id="lunch" class="content">
+            <h2 style="margin-bottom: 25px; color: #4a5568;">🍛 Lunch Catering Options</h2>
+            <div class="caterer-grid" id="lunchCaterers">
+                <!-- Lunch caterers will be populated by JavaScript -->
+            </div>
+        </div>
+
+        <div id="teabreak" class="content hidden">
+            <h2 style="margin-bottom: 25px; color: #4a5568;">☕ Tea Break Catering Options</h2>
+            <div class="caterer-grid" id="teabreakCaterers">
+                <!-- Tea break caterers will be populated by JavaScript -->
+            </div>
+        </div>
+
+        <div id="comparison" class="content hidden">
+            <h2 style="margin-bottom: 25px; color: #4a5568;">📊 Cost Comparison & Analytics</h2>
+            <div class="chart-container">
+                <div class="chart-card">
+                    <div class="chart-title">Lunch Catering Costs</div>
+                    <canvas id="lunchChart"></canvas>
+                </div>
+                <div class="chart-card">
+                    <div class="chart-title">Tea Break Catering Costs</div>
+                    <canvas id="teabreakChart"></canvas>
+                </div>
+            </div>
+            <div class="recommendations" id="recommendations">
+                <!-- Recommendations will be populated by JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Catering data
+        const lunchCaterers = [
+            {
+                name: "Neo Garden Package A",
+                pricePerPerson: 19.71,
+                deliveryCharge: 98.10,
+                minPax: 50,
+                highlights: {
+                    "Main Course": "Sin Chow Mee Hoon, Yang Chow Fried Rice, Thai Pineapple Rice, Fried Hong Kong Mee",
+                    "Vegetables": "Loh Han Chye, Mixed Cabbage, Braised Bean Curd, Xiao Bai Cai with Mushroom",
+                    "Fish": "Sweet & Sour Fish, Dried Chili Fish, Breaded Fish Fillet w Mayo, Spring Onion Fish",
+                    "Chicken": "Lemon Chicken, Honey Chicken, Sweet & Sour Chicken, Black Pepper Chicken",
+                    "Finger Food": "Spring Roll, Fish Ball, Breaded Scallop, Samosa",
+                    "Dessert": "Ice Jelly w Cocktail, Chin Chow w Logan, Almond Jelly w Logan"
+                },
+                features: ["Disposable Cutlery Included", "Multiple Main Course Options", "Comprehensive Menu"],
+                note: "May exceed budget with delivery costs"
+            },
+            {
+                name: "Elsie's Kitchen - Nostalgic Taste",
+                pricePerPerson: 16.67,
+                deliveryCharge: 98.10,
+                minPax: 50,
+                highlights: {
+                    "Rice & Noodles": "Nasi Goreng Kampung, Thai Pineapple Fried Rice, Mamak-Indonesian Mie Goreng",
+                    "Meat": "Sticky Lemon Chicken, Kunyit-Ginger Fried Chicken, Golden Cereal Fish",
+                    "Vegetables": "Nonya Chap Chye, Chop Suey Mixed Vegetables, Xiao Bai Chye with Mushrooms",
+                    "Finger Food": "Thai Fish Cake, Potato Samosa, Honey Shrimp Wanton, Seafood Money Bag",
+                    "Desserts": "Pulut Hitam Tart, Tau Suan with You Tiao, Pandan Buttercream Choux"
+                },
+                features: ["Cutlery & Disposable Plates", "Local Nostalgic Flavors", "Authentic Asian Cuisine"],
+                note: "Best value for traditional flavors"
+            },
+            {
+                name: "Liang Food Caterer Standard Buffet A",
+                pricePerPerson: 17.75,
+                deliveryCharge: 58.00,
+                minPax: 30,
+                highlights: {
+                    "Main Dishes": "Curry Chicken, Rendang Chicken, Sweet Sour Fish, Assam Fish",
+                    "Rice & Noodles": "Crabbites Egg Fried Rice, Biryani Rice, Fried Bee Hoon, Laksa Linguine",
+                    "Sides": "Prawn Wanton, Breaded Scallop, Ngoh Hiang, Thai Fishcake",
+                    "Vegetarian": "Plant-based Nuggets, Plant-based Swedish Balls",
+                    "Desserts": "Chendol Gula Melaka, Mixed Fruit Platter, Chocolate Eclair"
+                },
+                features: ["Lowest Minimum Guests (30)", "Free Delivery >$1000", "Vegetarian Options", "Diverse Menu"],
+                note: "Most flexible option with lowest minimum"
+            }
+        ];
+
+        const teabreakCaterers = [
+            {
+                name: "Neo Garden High Tea B",
+                pricePerPerson: 8.39,
+                deliveryCharge: 98.10,
+                minPax: 80,
+                highlights: {
+                    "Salads": "Potato Salad, Garden Salad, Caesar Salad, Tropical Fruits Salad",
+                    "Sandwiches": "Egg Mayo, Tuna Mayo, Cheddar Cheese, Sardine, Veggie",
+                    "Pastries": "Mini Custard Puff, Swiss Roll, Butter Cake, Marble Cake",
+                    "Deep Fried": "Fish Ball, Spring Roll, Breaded Scallop, Mini Curry Puff",
+                    "Dim Sum": "Steamed Yam Cake, Mini Soon Kueh, Mini Red Bean Pau"
+                },
+                features: ["Traditional High Tea Setup", "Variety of Sandwiches", "Fresh Fruit Platter"],
+                note: "Requires minimum 80 guests"
+            },
+            {
+                name: "Elsie's Kitchen Classic Tea Menu",
+                pricePerPerson: 8.75,
+                deliveryCharge: 98.10,
+                minPax: 80,
+                highlights: {
+                    "Noodles": "Seafood White Bee Hoon, Nonya Fried Mee Siam, Mamak-Indonesian Mie Goreng",
+                    "Finger Food": "Ebi Fry, Breaded Salad Roll, Thai Fish Cake, Potato Samosa",
+                    "Dim Sum": "Steamed Red Bean Bun, Crystal Dumpling, Chicken Siew Mai",
+                    "Desserts": "Almond Logan, Bubur Hitam, Cheng Teng, Tropical Fresh Fruit",
+                    "Cakes": "Pandan Cake, Gula Melaka Butter Cake, Ondeh Cake"
+                },
+                features: ["Most Comprehensive Menu", "Local Specialty Items", "Hot & Cold Beverages"],
+                note: "Premium pricing with extensive options"
+            },
+            {
+                name: "Liang Food Caterer Tea Reception B",
+                pricePerPerson: 9.00,
+                deliveryCharge: 58.00,
+                minPax: 60,
+                highlights: {
+                    "Dim Sum": "Chicken Siew Mai, Mini Har Kao, Salted Egg Custard Pau",
+                    "Snacks": "Sotong Ball, Fish Ball, Spring Roll, Thai Fishcake",
+                    "Sandwiches": "Egg Mayonnaise, Tuna Mayonnaise, Butter & Kaya",
+                    "Pastries": "Chocolate Éclair, Cream Puffs, Swiss Roll",
+                    "Fruits": "Watermelon, Honeydew"
+                },
+                features: ["Lowest Delivery Charge*", "Fresh Fruits Included", "Plant-based Options"],
+                note: "Simple but comprehensive tea reception (*Free delivery if food >$1000 before GST)"
+            }
+        ];
+
+        let currentGuestCount = 80;
+        let lunchChart, teabreakChart;
+
+        function showTab(tabName) {
+            // Hide all content
+            document.querySelectorAll('.content').forEach(content => {
+                content.classList.add('hidden');
+            });
+            
+            // Remove active class from all tabs
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Show selected content and activate tab
+            document.getElementById(tabName).classList.remove('hidden');
+            event.target.classList.add('active');
+            
+            if (tabName === 'comparison') {
+                setTimeout(updateCharts, 100);
+            }
+        }
+
+        function calculateTotalCost(caterer, guestCount) {
+            if (guestCount < caterer.minPax) {
+                guestCount = caterer.minPax;
+            }
+            const foodCost = caterer.pricePerPerson * guestCount;
+            
+            // Special rule for Liang Food Tea Reception B: waive delivery if food > $1000 before GST
+            let deliveryCharge = caterer.deliveryCharge;
+            if (caterer.name === "Liang Food Caterer Tea Reception B") {
+                // Assuming price includes GST (7%), so food before GST = foodCost / 1.07
+                const foodCostBeforeGST = foodCost / 1.07;
+                if (foodCostBeforeGST > 1000) {
+                    deliveryCharge = 0;
+                }
+            }
+            
+            const totalCost = foodCost + deliveryCharge;
+            return { foodCost, totalCost, adjustedGuestCount: guestCount, deliveryCharge };
+        }
+
+        function renderCaterers(caterers, containerId) {
+            const container = document.getElementById(containerId);
+            container.innerHTML = '';
+            
+            caterers.forEach(caterer => {
+                const costs = calculateTotalCost(caterer, currentGuestCount);
+                const isMinimumAdjusted = costs.adjustedGuestCount > currentGuestCount;
+                
+                const card = document.createElement('div');
+                card.className = 'caterer-card';
+                
+                card.innerHTML = `
+                    <div class="caterer-name">
+                        ${caterer.name}
+                        <span style="font-size: 0.7em; background: #e2e8f0; padding: 4px 8px; border-radius: 10px; color: #4a5568;">
+                            Min ${caterer.minPax} pax
+                        </span>
+                    </div>
+                    
+                    <div class="price-badge">$${caterer.pricePerPerson.toFixed(2)} per person</div>
+                    
+                    ${isMinimumAdjusted ? `
+                        <div class="warning">
+                            ⚠️ Using minimum ${caterer.minPax} guests (you entered ${currentGuestCount})
+                        </div>
+                    ` : ''}
+                    
+                    <div class="menu-highlights">
+                        ${Object.entries(caterer.highlights).map(([category, items]) => `
+                            <div class="menu-category">
+                                <strong>${category}:</strong>
+                                <div class="menu-items">${items}</div>
+                            </div>
+                        `).join('')}
+                    </div>
+                    
+                    <ul class="features-list">
+                        ${caterer.features.map(feature => `<li>${feature}</li>`).join('')}
+                    </ul>
+                    
+                    <div style="margin-top: 15px; padding-top: 15px; border-top: 2px solid #e2e8f0;">
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+                            <span>Food Cost (${costs.adjustedGuestCount} pax):</span>
+                            <strong>$${costs.foodCost.toFixed(2)}</strong>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+                            <span>Delivery Charge:</span>
+                            <strong>$${caterer.deliveryCharge.toFixed(2)}</strong>
+                        </div>
+                    </div>
+                    
+                    <div class="total-cost">
+                        Total Cost: $${costs.totalCost.toFixed(2)}
+                    </div>
+                    
+                    ${caterer.note ? `
+                        <div class="budget-alert">
+                            💡 <strong>Note:</strong> ${caterer.note}
+                        </div>
+                    ` : ''}
+                `;
+                
+                container.appendChild(card);
+            });
+        }
+
+        function updateCalculations() {
+            currentGuestCount = parseInt(document.getElementById('guestCount').value) || 80;
+            renderCaterers(lunchCaterers, 'lunchCaterers');
+            renderCaterers(teabreakCaterers, 'teabreakCaterers');
+            updateRecommendations();
+            if (lunchChart && teabreakChart) {
+                updateCharts();
+            }
+        }
+
+        function updateCharts() {
+            const lunchData = lunchCaterers.map(caterer => {
+                const costs = calculateTotalCost(caterer, currentGuestCount);
+                return {
+                    name: caterer.name.split(' ')[0] + ' ' + caterer.name.split(' ')[1],
+                    cost: costs.totalCost
+                };
+            });
+            
+            const teabreakData = teabreakCaterers.map(caterer => {
+                const costs = calculateTotalCost(caterer, currentGuestCount);
+                return {
+                    name: caterer.name.split(' ')[0] + ' ' + caterer.name.split(' ')[1],
+                    cost: costs.totalCost
+                };
+            });
+
+            // Destroy existing charts
+            if (lunchChart) lunchChart.destroy();
+            if (teabreakChart) teabreakChart.destroy();
+
+            // Create new charts
+            const lunchCtx = document.getElementById('lunchChart').getContext('2d');
+            lunchChart = new Chart(lunchCtx, {
+                type: 'bar',
+                data: {
+                    labels: lunchData.map(d => d.name),
+                    datasets: [{
+                        label: 'Total Cost ($)',
+                        data: lunchData.map(d => d.cost),
+                        backgroundColor: [
+                            'rgba(147, 197, 253, 0.8)',
+                            'rgba(167, 243, 208, 0.8)',
+                            'rgba(253, 186, 116, 0.8)'
+                        ],
+                        borderColor: [
+                            'rgba(147, 197, 253, 1)',
+                            'rgba(167, 243, 208, 1)',
+                            'rgba(253, 186, 116, 1)'
+                        ],
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: function(value) {
+                                    return '$' + value.toFixed(0);
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+
+            const teabreakCtx = document.getElementById('teabreakChart').getContext('2d');
+            teabreakChart = new Chart(teabreakCtx, {
+                type: 'bar',
+                data: {
+                    labels: teabreakData.map(d => d.name),
+                    datasets: [{
+                        label: 'Total Cost ($)',
+                        data: teabreakData.map(d => d.cost),
+                        backgroundColor: [
+                            'rgba(147, 197, 253, 0.8)',
+                            'rgba(252, 165, 165, 0.8)',
+                            'rgba(153, 246, 228, 0.8)'
+                        ],
+                        borderColor: [
+                            'rgba(147, 197, 253, 1)',
+                            'rgba(252, 165, 165, 1)',
+                            'rgba(153, 246, 228, 1)'
+                        ],
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: function(value) {
+                                    return '$' + value.toFixed(0);
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        function updateRecommendations() {
+            // Calculate best options
+            const lunchCosts = lunchCaterers.map(caterer => ({
+                ...caterer,
+                ...calculateTotalCost(caterer, currentGuestCount)
+            }));
+            
+            const teabreakCosts = teabreakCaterers.map(caterer => ({
+                ...caterer,
+                ...calculateTotalCost(caterer, currentGuestCount)
+            }));
+
+            const bestLunch = lunchCosts.reduce((best, current) => 
+                current.totalCost < best.totalCost ? current : best
+            );
+
+            const bestTeabreak = teabreakCosts.reduce((best, current) => 
+                current.totalCost < best.totalCost ? current : best
+            );
+
+            const totalBestCost = bestLunch.totalCost + bestTeabreak.totalCost;
+
+            const recommendationsHtml = `
+                <h3>💡 Smart Recommendations for ${currentGuestCount} Guests</h3>
+                
+                <div class="recommendation-item">
+                    <strong>🏆 Best Value Combo:</strong><br>
+                    Lunch: <strong>${bestLunch.name}</strong> - $${bestLunch.totalCost.toFixed(2)}<br>
+                    Tea Break: <strong>${bestTeabreak.name}</strong> - $${bestTeabreak.totalCost.toFixed(2)}<br>
+                    <div style="background: linear-gradient(45deg, #48bb78, #38a169); color: white; padding: 10px; border-radius: 8px; margin-top: 10px; text-align: center; font-weight: bold;">
+                        Total Combined Cost: $${totalBestCost.toFixed(2)}
+                    </div>
+                </div>
+
+                <div class="recommendation-item">
+                    <strong>📊 Cost Analysis:</strong><br>
+                    • Most affordable lunch: ${bestLunch.name} ($${bestLunch.totalCost.toFixed(2)})<br>
+                    • Most affordable tea break: ${bestTeabreak.name} ($${bestTeabreak.totalCost.toFixed(2)})<br>
+                    • Average cost per person (combined): $${(totalBestCost / currentGuestCount).toFixed(2)}
+                </div>
+
+                <div class="recommendation-item">
+                    <strong>⚠️ Important Considerations:</strong><br>
+                    • Check minimum guest requirements for each caterer<br>
+                    • Neo Garden options may exceed budget due to high delivery charges<br>
+                    • Liang Food offers the most flexibility with lowest minimums<br>
+                    • Consider dietary restrictions and menu variety for your audience
+                </div>
+
+                <div class="recommendation-item">
+                    <strong>🎯 Best for Different Scenarios:</strong><br>
+                    • <strong>Budget-conscious:</strong> Liang Food (both lunch & tea) - Lower delivery charges<br>
+                    • <strong>Premium experience:</strong> Elsie's Kitchen - Authentic local flavors<br>
+                    • <strong>Large groups (80+):</strong> Neo Garden - Comprehensive menu options<br>
+                    • <strong>Small groups (30-50):</strong> Liang Food - Lowest minimum requirements
+                </div>
+            `;
+
+            document.getElementById('recommendations').innerHTML = recommendationsHtml;
+        }
+
+        // Initialize dashboard
+        document.addEventListener('DOMContentLoaded', function() {
+            updateCalculations();
+        });
+    </script>
+</body>
+</html>
